@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <deque>
 #include <string>
 #include <string_view>
 
@@ -25,6 +26,10 @@ protected:
   // Please add any additional state to the ByteStream here, and not to the Writer and Reader interfaces.
   uint64_t capacity_;
   bool error_ {};
+  uint64_t read_count;
+  uint64_t write_count;
+  uint64_t writable_space()const { return capacity_ - bStream.size(); };
+  std::deque<char> bStream;
 };
 
 class Writer : public ByteStream
@@ -36,6 +41,8 @@ public:
   bool is_closed() const;              // Has the stream been closed?
   uint64_t available_capacity() const; // How many bytes can be pushed to the stream right now?
   uint64_t bytes_pushed() const;       // Total number of bytes cumulatively pushed to the stream
+private:
+  bool is_close_ = false;
 };
 
 class Reader : public ByteStream
