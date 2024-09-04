@@ -29,7 +29,8 @@ protected:
   uint64_t read_count;
   uint64_t write_count;
   uint64_t writable_space()const { return capacity_ - bStream.size(); };
-  std::deque<char> bStream;
+  std::deque<char> bStream = {};
+  bool is_close_ = false;
 };
 
 class Writer : public ByteStream
@@ -41,8 +42,6 @@ public:
   bool is_closed() const;              // Has the stream been closed?
   uint64_t available_capacity() const; // How many bytes can be pushed to the stream right now?
   uint64_t bytes_pushed() const;       // Total number of bytes cumulatively pushed to the stream
-private:
-  bool is_close_ = false;
 };
 
 class Reader : public ByteStream

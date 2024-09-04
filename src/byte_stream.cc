@@ -2,7 +2,9 @@
 
 using namespace std;
 
-ByteStream::ByteStream( uint64_t capacity ) : capacity_( capacity ) {}
+ByteStream::ByteStream( uint64_t capacity )
+  : capacity_( capacity ), error_( false ), read_count( 0 ), write_count( 0 )
+{}
 
 bool Writer::is_closed() const
 {
@@ -16,8 +18,19 @@ void Writer::push( string data )
   if ( is_close_ )
     set_error();
   uint64_t space = writable_space();
+  int s = int( space );
+  printf( "%d", s );
   if ( space > data.size() )
+  {
+    bStream.insert( bStream.end(), data.begin(), data.begin() + data.size() );
+    write_count += data.size();
+  }
+  else
+  {
     bStream.insert( bStream.end(), data.begin(), data.begin() + space );
+    write_count += space;
+  }
+
   return;
 }
 
@@ -42,7 +55,7 @@ uint64_t Writer::bytes_pushed() const
 bool Reader::is_finished() const
 {
   // Your code here.
-  return {};
+  return ( is_close_ && bStream.empty() );
 }
 
 uint64_t Reader::bytes_popped() const
@@ -65,7 +78,7 @@ void Reader::pop( uint64_t len )
 {
   // Your code here.
   if ( len <= bStream.size() ) {
-    for ( auto i = 0; i < len; i++ ) {
+    for ( size_t i = 0; i < len; i++ ) {
       bStream.pop_front();
       read_count++;
     }

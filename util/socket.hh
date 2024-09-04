@@ -5,6 +5,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <string_view>
 #include <sys/socket.h>
 
 //! \brief Base class for network sockets (TCP, UDP, etc.)
