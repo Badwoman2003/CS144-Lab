@@ -20,13 +20,10 @@ void Writer::push( string data )
   uint64_t space = writable_space();
   int s = int( space );
   printf( "%d", s );
-  if ( space > data.size() )
-  {
+  if ( space > data.size() ) {
     bStream.insert( bStream.end(), data.begin(), data.begin() + data.size() );
     write_count += data.size();
-  }
-  else
-  {
+  } else {
     bStream.insert( bStream.end(), data.begin(), data.begin() + space );
     write_count += space;
   }

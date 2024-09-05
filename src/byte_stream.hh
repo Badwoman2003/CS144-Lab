@@ -28,7 +28,7 @@ protected:
   bool error_ {};
   uint64_t read_count;
   uint64_t write_count;
-  uint64_t writable_space()const { return capacity_ - bStream.size(); };
+  uint64_t writable_space() const { return capacity_ - bStream.size(); };
   std::deque<char> bStream = {};
   bool is_close_ = false;
 };
