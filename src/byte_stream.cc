@@ -15,8 +15,8 @@ bool Writer::is_closed() const
 void Writer::push( string data )
 {
   // Your code here.
-  if ( is_close_ )
-    set_error();
+  if ( is_closed() )
+    return;
   uint64_t space = writable_space();
   int s = int( space );
   printf( "%d", s );
@@ -52,7 +52,7 @@ uint64_t Writer::bytes_pushed() const
 bool Reader::is_finished() const
 {
   // Your code here.
-  return ( is_close_ && bStream.empty() );
+  return ( is_close_  &&bStream.empty());
 }
 
 uint64_t Reader::bytes_popped() const
