@@ -1,4 +1,5 @@
 #include "wrapping_integers.hh"
+#include <iostream>
 
 using namespace std;
 
@@ -20,7 +21,7 @@ uint64_t Wrap32::unwrap( Wrap32 zero_point, uint64_t checkpoint ) const
       uint32_t direct_distance = check_seq.raw_value_ - this->raw_value_;
       uint32_t wrapped_distance = this->raw_value_ - check_seq.raw_value_;
 
-      if ( direct_distance < wrapped_distance ) {
+      if ( (direct_distance < wrapped_distance)&&(checkpoint>=direct_distance) ) {
         return checkpoint - direct_distance;
       } else {
         return checkpoint + wrapped_distance;
@@ -29,10 +30,11 @@ uint64_t Wrap32::unwrap( Wrap32 zero_point, uint64_t checkpoint ) const
       uint32_t direct_distance = this->raw_value_ - check_seq.raw_value_;
       uint32_t wrapped_distance = check_seq.raw_value_ - this->raw_value_;
 
-      if ( direct_distance < wrapped_distance ) {
-        return checkpoint - direct_distance;
+      if ( ( wrapped_distance < direct_distance )
+           && (checkpoint>=wrapped_distance) ) {
+        return checkpoint - wrapped_distance;
       } else {
-        return checkpoint + wrapped_distance;
+        return checkpoint + direct_distance;
       }
     }
   }
