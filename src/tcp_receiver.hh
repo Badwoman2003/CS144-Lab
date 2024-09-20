@@ -29,5 +29,7 @@ private:
   Reassembler reassembler_;
   std::optional<Wrap32> isn_ {std::nullopt};
   uint64_t checkpoint_ {0};
+  bool SYN{false};
+  bool FIN{false};
   bool RST{};
 };
