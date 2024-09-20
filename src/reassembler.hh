@@ -11,17 +11,7 @@ class Reassembler
 {
 public:
   // Construct Reassembler to write into given ByteStream.
-  explicit Reassembler( ByteStream&& output )
-    : output_( std::move( output ) )
-    , _capacity( output.bytes_cap() )
-    , assembled_bytes( 0 )
-    , stored_bytes( 0 )
-    , _str_to_assemble()
-    , _existed()
-    , _eof( false )
-    , eof_idx()
-    , _used_byte { std::make_pair( 0, std::numeric_limits<size_t>::max() ) }
-  {}
+  explicit Reassembler( ByteStream&& output ) : output_( std::move( output ) ) {}
 
   /*
    * Insert a new substring to be reassembled into a ByteStream.
@@ -56,19 +46,12 @@ public:
   const Writer& writer() const { return output_.writer(); }
 
 private:
-  using str_list = std::list<std::pair<std::string, size_t>>;
-  using str_map = std::map<size_t, str_list::iterator>;
+  void push_bytes( uint64_t first_index, std::string data, bool is_last_substring );
+  void cache_bytes( uint64_t first_index, std::string data, bool is_last_substring );
+  void flush_buffer(); // 刷新缓冲区，把能推入的数据推入流中
+
+  std::list<std::tuple<uint64_t, std::string, bool>> unordered_bytes_ {}; // 一个有序的、无重复的缓冲区
+  uint64_t num_bytes_pending_ {};                                         // 当前存储的字节数
+  uint64_t expecting_index_ {};                                           // 表示期待下一个字节的序号
   ByteStream output_; // the Reassembler writes to this ByteStream
-  size_t _capacity;
-  size_t assembled_bytes;
-  size_t stored_bytes;
-  str_list _str_to_assemble;
-  str_map _existed;
-  bool _eof;
-  size_t eof_idx;
-  std::set<std::pair<size_t, size_t>> _used_byte;
-  using Type1 = std::set<std::pair<size_t, size_t>>::iterator;
-  using Type2 = std::vector<std::pair<size_t, size_t>>;
-  void remove_segement( const Type1& it, size_t left_, size_t right_, Type2& erase, Type2& insert );
-  bool empty() const;
 };
