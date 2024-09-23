@@ -3,6 +3,7 @@
 #include "byte_stream.hh"
 #include "tcp_receiver_message.hh"
 #include "tcp_sender_message.hh"
+#include "tcp_timer.hh"
 
 #include <cstdint>
 #include <functional>
@@ -48,4 +49,5 @@ private:
   ByteStream input_;
   Wrap32 isn_;
   uint64_t initial_RTO_ms_;
+  TCPTimer timer;
 };

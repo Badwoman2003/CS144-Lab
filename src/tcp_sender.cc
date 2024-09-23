@@ -18,7 +18,8 @@ uint64_t TCPSender::consecutive_retransmissions() const
 void TCPSender::push( const TransmitFunction& transmit )
 {
   // Your code here.
-  (void)transmit;
+  TCPSenderMessage tcp_send {};
+  transmit(tcp_send);
 }
 
 TCPSenderMessage TCPSender::make_empty_message() const
@@ -36,7 +37,6 @@ void TCPSender::receive( const TCPReceiverMessage& msg )
 void TCPSender::tick( uint64_t ms_since_last_tick, const TransmitFunction& transmit )
 {
   // Your code here.
-  (void)ms_since_last_tick;
-  (void)transmit;
-  (void)initial_RTO_ms_;
+  timer.TimePass(ms_since_last_tick);
+  
 }
